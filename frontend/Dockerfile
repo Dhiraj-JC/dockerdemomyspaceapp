@@ -1,21 +1,21 @@
-# specific base image
-FROM node:alpine
+# Stage 1 : Build
 
-# specific working directory
+FROM node:alpine AS build
+
 WORKDIR /app
 
-
-# Copy project dependencies file
 COPY ./package.json .
 
-
-# Install dependencies
 RUN npm install
 
+COPY . .
 
-# Build project
-RUN npm build
+RUN npm run build
 
+# Stage 2 : Serve
 
-# Startup command
-CMD ["npm", "start"]
+FROM nginx:alpine
+
+COPY --from=build /app/build /usr/share/nginx/html
+
+CMD ["nginx","-g","daemon off;"]
