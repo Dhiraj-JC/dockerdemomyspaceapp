@@ -16,7 +16,9 @@ app.get('/students',(req,res)=> {
     ]);
 });
 
-
+app.get('/error',(req,res)=> {
+    process.exit(1);
+});
 
 app.listen(7000,()=> {
     console.log('listening on port 7000');
